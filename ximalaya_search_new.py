@@ -40,7 +40,7 @@ class XiMa(object):
         """
         nowtime = str(round(time.time() * 1000))
         servertime = self.get_time()
-        sign = str(hashlib.md5("ximalaya-{}".format(servertime).encode()).hexdigest()) + "({})".format(
+        sign = str(hashlib.md5("himalaya-{}".format(servertime).encode()).hexdigest()) + "({})".format(
             str(round(random.random() * 100))) + servertime + "({})".format(str(round(random.random() * 100))) + nowtime
         self.header["xm-sign"] = sign
         # print(sign)
