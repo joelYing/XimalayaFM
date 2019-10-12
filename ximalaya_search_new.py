@@ -11,7 +11,7 @@ import random
 import requests
 
 """
-注意运行前请修改 make_dir() 中的下载路径！
+注意运行前请修改 make_dir() 中的下载路径！不要过度爬取，仅供测试学习！
 """
 
 
