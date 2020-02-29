@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-# author:joel 2020-02-02
+# author:joel 18-6-5
 
 import sys
 import hashlib
@@ -198,6 +198,7 @@ class XiMa:
         # 获取指定albumID的每一页音频的ID等track信息
         self.album_tracks_api = 'https://www.ximalaya.com/revision/album/v1/getTracksList?albumId={}&pageNum={}'
         # APP抓包得到，可用于获取付费节目总音源个数与节目名，获取音集所有音频ID，通过改变pageSize的大小，（albumId, pageSize）
+        # 2020-02-29 最新测试pageSize最大为1000，所以针对章节大的有声书修改规则
         self.pay_size_api = 'http://180.153.255.6/mobile-album/album/page/ts-1569206246849?ac=WIFI&albumId={}' \
                             '&device=android&isAsc=true&isQueryInvitationBrand=true&isVideoAsc=true&pageId=1' \
                             '&pageSize={}'
@@ -267,14 +268,14 @@ class XiMa:
         response = self.s.get(self.free_sign_api.format(xm_fm_id, page), headers=self.header)
         return response
 
-    def get_pay_album(self, xm_fm_id, max_page):
+    def get_pay_album(self, xm_fm_id, page_num):
         """
         获取付费的音频的播放源信息
         :param xm_fm_id:
         :param max_page:
         :return: response
         """
-        response = self.s.get(self.pay_size_api.format(xm_fm_id, max_page), headers=self.header)
+        response = self.s.get(self.album_tracks_api.format(xm_fm_id, page_num), headers=self.header)
         return response
 
     def save_fm2local(self, title, src, path):
@@ -285,7 +286,7 @@ class XiMa:
         :param path:
         """
         r_audio_src = requests.get(src, headers=self.header)
-        m4a_path = path + title + '.m4a'
+        m4a_path = path + '\\' + title + '.m4a'
         if not os.path.exists(m4a_path):
             with open(m4a_path, 'wb') as f:
                 f.write(r_audio_src.content)
@@ -318,14 +319,14 @@ class XiMaMain:
         fm_count, fm_path, max_page = self.xmd.get_fm(xm_fm_id, path)
         if max_page:
             # 这里应该是 fm_count
-            r = self.xmd.get_pay_album(xm_fm_id, fm_count)
-            r_json = json.loads(r.text)
-            tracks = r_json['data']['tracks']['list']
-            for i, track in enumerate(tracks):
-                if i > 22:
+            for p in range(1, int(max_page) + 1):
+                r = self.xmd.get_pay_album(xm_fm_id, p)
+                r_json = json.loads(r.text)
+                tracks = r_json['data']['tracks']
+                for i, track in enumerate(tracks):
                     audio_id = track['trackId']
                     audio_title = str(track['title']).replace(' ', '')
-                    audio_url = self.xmd.yss_api.format(str(track['albumId']), audio_id)
+                    audio_url = self.xmd.base_url + track['url']
                     print_text(str(audio_title + '' + audio_url))
                     real_url = self.auto_click(audio_url, token)
                     self.xmd.save_fm2local(audio_title, real_url, fm_path)
