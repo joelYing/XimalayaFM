@@ -51,3 +51,7 @@ pip3 install scapy-http
 还要安装winpcap软件，为监控网卡提供接口，[下载地址](https://www.winpcap.org/install/default.htm)  
 
 注意替换代码中的iface：[iface 参数为你要监听的网卡的名称，参考这里](https://blog.csdn.net/luanpeng825485697/article/details/78379154)  
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/joelYing/XimalayaFM.svg)](https://starchart.cc/joelYing/XimalayaFM)
