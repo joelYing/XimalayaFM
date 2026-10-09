@@ -54,4 +54,4 @@ pip3 install scapy-http
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/joelYing/XimalayaFM.svg)](https://starchart.cc/joelYing/XimalayaFM)
+[![Stargazers over time](https://api.star-history.com/svg?repos=joelYing/XimalayaFM&type=Date)](https://www.star-history.com/#joelYing/XimalayaFM&Date)
